@@ -98,6 +98,35 @@ How to install Awesome WM instead KWin on KDE Plasma.
       systemctl --user enable awesome-plasma.service
       ````
 
+### Create and Enable Picom Service
+   * Create `picom` service:
+      ````
+      touch ~/.config/systemd/user/picom.service
+      sudo chmod +x ~/.config/systemd/user/picom.service
+      ````
+   * Add in `picom.service`:
+      ````
+      [Install]
+      WantedBy=plasma-workspace.target
+
+      [Unit]
+      Description=Picom compositor fork
+      Documentation=man:picom(1)
+      Before=plasma-workspace.target
+      StartLimitBurst=3
+      StartLimitIntervalSec=60
+
+      [Service]
+      ExecStart=/usr/bin/picom
+      ExecReload=/usr/bin/kill -SIGUSR1 $MAINPID
+      Restart=always
+      RestartSec=5
+      ````
+   * Enable `picom` service:
+      ````
+      systemctl --user enable picom.service
+      ````
+
 ## References
    * [Tutorials/Using Other Window Managers with Plasma](https://userbase.kde.org/Tutorials/Using_Other_Window_Managers_with_Plasma)
    * [KDE with Awesome WM](https://martin-ueding.de/posts/kde-with-awesome-wm/)
